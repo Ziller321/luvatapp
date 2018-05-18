@@ -8,6 +8,6 @@ terraform {
   backend "s3" {
     bucket = "sysart.cfg"
     region = "eu-central-1"
-    key    = "kalastuslupa/tf/state"
+    key    = "luvatapp/tf/state"
   }
 }
