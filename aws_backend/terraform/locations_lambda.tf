@@ -1,12 +1,12 @@
-data "archive_file" "lambda_process_archive_file" {
+data "archive_file" "locations_lambda_process_archive_file" {
   type        = "zip"
-  source_dir = "../src"
-  output_path = "${var.builddir}/lambda.zip"
+  source_dir = "../locations-lambda"
+  output_path = "${var.builddir}/locations_lambda.zip"
 }
 resource "aws_s3_bucket_object" "deploy_bucket" {
   bucket = "${var.s3_deploybucket}"
-  key    = "${local.resource_prefix}/lambda.zip"
-  source = "${var.builddir}/lambda.zip"
+  key    = "${local.resource_prefix}/${local.version}_locations_lambda.zip"
+  source = "${var.builddir}/locations_lambda.zip"
 }
 
 resource "aws_iam_role" "lambda_exec" {
@@ -29,11 +29,11 @@ resource "aws_iam_role" "lambda_exec" {
 EOF
 }
 
-resource "aws_lambda_function" "lambda_function" {
+resource "aws_lambda_function" "locations_lambda_function" {
   s3_bucket = "${aws_s3_bucket_object.deploy_bucket.bucket}"
   s3_key = "${aws_s3_bucket_object.deploy_bucket.key}"
 
-  function_name = "${local.resource_prefix}_lambda"
+  function_name = "${local.resource_prefix}_locations_lambda"
   handler = "main.handler"
   runtime = "nodejs6.10"
 
@@ -46,7 +46,6 @@ resource "aws_lambda_function" "lambda_function" {
   environment {
     variables = {
       DYNAMODB_REGION = "${var.region}"
-      #DYNAMODB_ORDERS_TABLE   = "${aws_dynamodb_table.orders.name}"
     }
   }
 }
