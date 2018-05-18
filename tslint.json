@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "tslint-config-standard",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "prettier": true,
+    "no-floating-promises": false
+  },
+  "autoFixOnSave": true,
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  }
+}
