@@ -3,7 +3,7 @@ import './App.css';
 import { Wrapper } from 'src/Components/Wrapper';
 import { Header } from 'src/Components/Header';
 import { Sidebar } from 'src/Components/Sidebar';
-import { GoogleMap } from 'src/Components/GoogleMap';
+import { KoskiMap } from 'src/Components/KoskiMap';
 
 const mock: KoskiLocation[] = require("./mock");
 
@@ -44,7 +44,7 @@ class App extends React.Component<Props, State> {
       <Wrapper>
         <Header title="Kalastusluvat" />
         <Sidebar locationList={this.state.data} setActiveLocation={this.setActiveLocation} />
-        <GoogleMap locationList={this.state.data} activeLocation={this.state.activeLocation} />
+        <KoskiMap locationList={this.state.data} activeLocation={this.state.activeLocation} />
       </Wrapper>
     );
   }

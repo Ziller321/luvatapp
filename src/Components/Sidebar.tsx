@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SidebarContainer } from "./SidebarContainer";
-import { LocationListItem } from './LocationListItem';
+import { LocationListItem } from "./LocationListItem";
 
 interface Props {
   locationList: KoskiLocation[];
@@ -12,14 +12,18 @@ export class Sidebar extends Component<Props> {
     const { locationList } = this.props;
     return (
       <SidebarContainer>
-        {
-          locationList.map(location =>
-            <LocationListItem key={location.id} onClick={() => this.props.setActiveLocation(location)}>
-              {location.name}
-            </LocationListItem>
-          )
-        }
+        {locationList.map(location => (
+          <LocationListItem
+            key={location.id}
+            location={location}
+            onClick={() => {
+              this.props.setActiveLocation(location);
+            }}
+          />
+
+
+        ))}
       </SidebarContainer>
-    )
+    );
   }
 }
