@@ -1,11 +1,5 @@
-#!/usr/bin/env bash
-if test "$BASH" = "" || "$BASH" -uc "a=();true \"\${a[@]}\"" 2>/dev/null; then
-    set -euo pipefail
-else
-    set -eo pipefail
-fi
-shopt -s nullglob globstar
-
+#!/bin/sh
+set -e
 
 rm -rf _build
 mkdir _build
