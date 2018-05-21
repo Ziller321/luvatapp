@@ -3,28 +3,25 @@ import { compose, withProps } from "recompose";
 import {
   withScriptjs,
   withGoogleMap,
-  GoogleMap as GoogleMapComponent,
+  GoogleMap,
   Marker
 } from "react-google-maps";
 
-
 interface Props {
-  locationList: KoskiLocation[]
-  activeLocation?: KoskiLocation
+  locationList: KoskiLocation[];
+  activeLocation?: KoskiLocation;
 }
 interface State {
-  locationList: KoskiLocation[],
-  activeLocation?: KoskiLocation
+  locationList: KoskiLocation[];
   pos: {
     lat: number;
     lng: number;
-  }
+  };
 }
 
 class MapComponent extends Component<Props, State> {
-
   constructor(props: Props) {
-    super(props)
+    super(props);
 
     this.state = {
       locationList: [],
@@ -32,18 +29,27 @@ class MapComponent extends Component<Props, State> {
         lat: 0,
         lng: 0
       }
-    }
+    };
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    const pos =
+      nextProps.activeLocation &&
+      nextProps.activeLocation.gdata.results[0].geometry.location;
+
+    if (pos) {
+      return {
+        pos,
+        locationList: nextProps.locationList
+      };
+    }
     if (nextProps.locationList === prevState.locationList) {
       return null;
     }
 
     return {
-      activeLocation: nextProps.activeLocation,
-      locationList: nextProps.locationList,
-    }
+      locationList: nextProps.locationList
+    };
   }
 
   componentDidMount() {
@@ -52,7 +58,11 @@ class MapComponent extends Component<Props, State> {
       timeout: 50000,
       maximumAge: 0
     };
-    navigator.geolocation.getCurrentPosition(this.geolocationSuccess, this.geolocationError, options);
+    navigator.geolocation.getCurrentPosition(
+      this.geolocationSuccess,
+      this.geolocationError,
+      options
+    );
   }
   geolocationSuccess = (pos: Position) => {
     const crd = pos.coords;
@@ -62,35 +72,28 @@ class MapComponent extends Component<Props, State> {
         lat: crd.latitude,
         lng: crd.longitude
       }
-    })
-  }
-
+    });
+  };
 
   geolocationError = (err: PositionError) => {
     console.warn(`ERROR(${err.code}): ${err.message}`);
-  }
+  };
 
   render() {
-    console.log("render", this);
-
     return (
-      <GoogleMapComponent defaultZoom={8} center={this.state.pos}>
+      <GoogleMap defaultZoom={8} center={this.state.pos}>
         {this.state.locationList.map(location => {
           // console.log("location", location);
 
           const position = location.gdata.results[0].geometry.location;
-          return (
-            <Marker key={position.lat} position={position} />
-          )
-
+          return <Marker key={position.lat} position={position} />;
         })}
-
-      </GoogleMapComponent>
-    )
+      </GoogleMap>
+    );
   }
 }
 
-export const GoogleMap = compose<{}, Props>(
+export const KoskiMap = compose<{}, Props>(
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyBRCIZ4b_fk8H1-IRnrDwC-Q9lQzw0u3Uc&v=3.exp&libraries=geometry,drawing,places",
@@ -100,4 +103,4 @@ export const GoogleMap = compose<{}, Props>(
   }),
   withScriptjs,
   withGoogleMap
-)(MapComponent)
+)(MapComponent);

@@ -28,7 +28,7 @@ interface GResult {
     viewport: {
       northeast: Coordinates;
       southwest: Coordinates;
-    }
+    };
   };
   place_id: string;
   type: string[];
@@ -39,5 +39,5 @@ declare interface KoskiLocation {
   name: string;
   prices: Price[];
   address: string;
-  gdata: GoogleData
+  gdata: GoogleData;
 }
